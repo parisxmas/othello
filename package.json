@@ -1,0 +1,17 @@
+{
+  "name": "webxr-othello",
+  "version": "1.0.0",
+  "description": "WebXR Othello game playable against CPU with sound effects",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -l 8080",
+    "dev": "npx serve -l 8080"
+  },
+  "keywords": ["webxr", "othello", "reversi", "game", "threejs"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
+

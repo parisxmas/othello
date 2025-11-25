@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>WebXR Othello</title>
+    <link rel="stylesheet" href="styles.css">
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.159.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.159.0/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <!-- Overlay UI -->
+        <div id="ui-overlay">
+            <div id="header">
+                <h1>OTHELLO</h1>
+                <div id="score-board">
+                    <div class="score black-score">
+                        <div class="disc black"></div>
+                        <span id="black-count">2</span>
+                    </div>
+                    <div class="score white-score">
+                        <div class="disc white"></div>
+                        <span id="white-count">2</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="turn-indicator">
+                <span id="turn-text">Senin sıran</span>
+            </div>
+            
+            <div id="controls">
+                <button id="vr-button" class="game-btn hidden">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M20.74 6H3.26A2.26 2.26 0 0 0 1 8.26v7.48A2.26 2.26 0 0 0 3.26 18h5.11a2.26 2.26 0 0 0 2.04-1.3l1.09-2.3a.75.75 0 0 1 1.36 0l1.09 2.3a2.26 2.26 0 0 0 2.04 1.3h5.11A2.26 2.26 0 0 0 23 15.74V8.26A2.26 2.26 0 0 0 20.74 6zM7.5 14a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm9 0a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                    </svg>
+                    VR Modu
+                </button>
+                <button id="new-game-btn" class="game-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    Yeni Oyun
+                </button>
+                <button id="sound-btn" class="game-btn">
+                    <svg id="sound-on-icon" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    <svg id="sound-off-icon" class="hidden" viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Game Over Modal -->
+        <div id="game-over-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="winner-text">Oyun Bitti!</h2>
+                <div id="final-score">
+                    <div class="final-score-item">
+                        <div class="disc black"></div>
+                        <span id="final-black">0</span>
+                    </div>
+                    <span class="vs">vs</span>
+                    <div class="final-score-item">
+                        <div class="disc white"></div>
+                        <span id="final-white">0</span>
+                    </div>
+                </div>
+                <button id="play-again-btn" class="game-btn primary">Tekrar Oyna</button>
+            </div>
+        </div>
+        
+        <!-- Loading Screen -->
+        <div id="loading-screen">
+            <div class="loader">
+                <div class="disc-loader"></div>
+                <p>Yükleniyor...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
+
