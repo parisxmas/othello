@@ -49,9 +49,9 @@ export class GameRenderer {
         this.scene = new THREE.Scene();
         
         // Create beautiful gradient background
-        const bgColor = new THREE.Color(0x0a0a14);
+        const bgColor = new THREE.Color(0x050510);
         this.scene.background = bgColor;
-        this.scene.fog = new THREE.Fog(bgColor, 8, 20);
+        this.scene.fog = new THREE.Fog(bgColor, 12, 30);
         
         // Camera
         this.camera = new THREE.PerspectiveCamera(
@@ -60,7 +60,7 @@ export class GameRenderer {
             0.1,
             100
         );
-        this.camera.position.set(0, 5, 5);
+        this.camera.position.set(0, 3.5, 6);
         this.camera.lookAt(0, 0, 0);
         
         // Renderer
@@ -86,8 +86,8 @@ export class GameRenderer {
         this.controls.dampingFactor = 0.05;
         this.controls.minDistance = 3;
         this.controls.maxDistance = 12;
-        this.controls.maxPolarAngle = Math.PI / 2.2;
-        this.controls.minPolarAngle = Math.PI / 6;
+        this.controls.maxPolarAngle = Math.PI / 2.1;
+        this.controls.minPolarAngle = Math.PI / 8;
         this.controls.target.set(0, 0, 0);
         
         // Initialize materials
@@ -300,29 +300,43 @@ export class GameRenderer {
     }
 
     createParticles() {
-        const particleCount = 200;
+        const particleCount = 500;
         const positions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
+        const sizes = new Float32Array(particleCount);
         
         const goldColor = new THREE.Color(0xd4af37);
         const whiteColor = new THREE.Color(0xffffff);
+        const blueWhite = new THREE.Color(0xaaccff);
         
         for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
             
-            // Distribute particles in a dome around the board
+            // Distribute particles across a full sky dome
             const theta = Math.random() * Math.PI * 2;
-            const phi = Math.random() * Math.PI * 0.5;
-            const radius = 5 + Math.random() * 8;
+            const phi = Math.random() * Math.PI * 0.6; // More coverage of the sky
+            const radius = 8 + Math.random() * 12;
             
             positions[i3] = Math.sin(phi) * Math.cos(theta) * radius;
-            positions[i3 + 1] = Math.cos(phi) * radius * 0.5 + 2;
+            positions[i3 + 1] = Math.cos(phi) * radius * 0.8 + 1; // Lower base, taller dome
             positions[i3 + 2] = Math.sin(phi) * Math.sin(theta) * radius;
             
-            const color = Math.random() > 0.7 ? goldColor : whiteColor;
+            // Varied star colors
+            const colorRand = Math.random();
+            let color;
+            if (colorRand > 0.85) {
+                color = goldColor;
+            } else if (colorRand > 0.7) {
+                color = blueWhite;
+            } else {
+                color = whiteColor;
+            }
             colors[i3] = color.r;
             colors[i3 + 1] = color.g;
             colors[i3 + 2] = color.b;
+            
+            // Varied star sizes
+            sizes[i] = 0.02 + Math.random() * 0.06;
         }
         
         const particleGeom = new THREE.BufferGeometry();
@@ -330,10 +344,10 @@ export class GameRenderer {
         particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         
         const particleMaterial = new THREE.PointsMaterial({
-            size: 0.05,
+            size: 0.06,
             vertexColors: true,
             transparent: true,
-            opacity: 0.6,
+            opacity: 0.8,
             sizeAttenuation: true,
         });
         

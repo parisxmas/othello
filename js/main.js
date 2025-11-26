@@ -56,9 +56,6 @@ class OthelloApp {
                 loadingScreen.style.display = 'none';
             }, 500);
         }, 1000);
-        
-        // Show turn indicator briefly
-        this.showTurnIndicator('Senin sıran');
     }
 
     setupUIListeners() {
@@ -183,11 +180,9 @@ class OthelloApp {
         
         if (currentPlayer === this.playerColor) {
             this.isPlayerTurn = true;
-            this.showTurnIndicator('Senin sıran');
             this.isProcessing = false;
         } else {
             this.isPlayerTurn = false;
-            this.showTurnIndicator('Bilgisayar düşünüyor...');
             await this.aiMove();
         }
     }
@@ -203,7 +198,6 @@ class OthelloApp {
         if (!move) {
             // AI has no valid moves, player continues
             this.isPlayerTurn = true;
-            this.showTurnIndicator('Senin sıran');
             this.renderer.updateValidMoves(this.game.getValidMoves());
             this.isProcessing = false;
             return;
@@ -246,11 +240,9 @@ class OthelloApp {
         
         if (currentPlayer === this.playerColor) {
             this.isPlayerTurn = true;
-            this.showTurnIndicator('Senin sıran');
             this.isProcessing = false;
         } else {
             // AI moves again (player had no moves)
-            this.showTurnIndicator('Bilgisayar düşünüyor...');
             await this.aiMove();
         }
     }
@@ -310,26 +302,12 @@ class OthelloApp {
         
         // Update valid moves
         this.renderer.updateValidMoves(this.game.getValidMoves());
-        
-        this.showTurnIndicator('Senin sıran');
     }
 
     updateUI() {
         const score = this.game.getScore();
         document.getElementById('black-count').textContent = score.black;
         document.getElementById('white-count').textContent = score.white;
-    }
-
-    showTurnIndicator(text) {
-        const indicator = document.getElementById('turn-indicator');
-        const turnText = document.getElementById('turn-text');
-        
-        turnText.textContent = text;
-        indicator.classList.add('visible');
-        
-        setTimeout(() => {
-            indicator.classList.remove('visible');
-        }, 1500);
     }
 
     wait(ms) {
