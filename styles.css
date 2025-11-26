@@ -126,12 +126,28 @@ body {
 .black-score span { color: #aaa; }
 .white-score span { color: #fff; }
 
+#author {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(212, 175, 55, 0.6);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    z-index: 15;
+}
+
 #controls {
     display: flex;
     justify-content: center;
     gap: 1rem;
     pointer-events: auto;
     flex-wrap: wrap;
+    padding-bottom: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: calc(100% - 200px);
 }
 
 .game-btn {
@@ -334,6 +350,17 @@ body {
     .game-btn {
         padding: 0.6rem 1rem;
         font-size: 0.85rem;
+    }
+    
+    #author {
+        bottom: 0.5rem;
+        left: 0.5rem;
+        font-size: 0.65rem;
+    }
+    
+    #controls {
+        max-width: 100%;
+        padding-bottom: 2rem;
     }
     
     .modal-content {

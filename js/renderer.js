@@ -659,22 +659,29 @@ export class GameRenderer {
 
     // WebXR Setup
     setupVR() {
-        const vrButton = VRButton.createButton(this.renderer);
-        vrButton.id = 'vr-session-button';
-        vrButton.style.display = 'none';
-        document.body.appendChild(vrButton);
-        
-        // Check VR availability
-        if ('xr' in navigator) {
-            navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
-                if (supported) {
-                    document.getElementById('vr-button').classList.remove('hidden');
-                    document.getElementById('vr-button').addEventListener('click', () => {
-                        vrButton.click();
-                    });
-                }
-            });
+        // Only setup VR if WebXR is available
+        if (!('xr' in navigator)) {
+            return;
         }
+        
+        navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
+            if (supported) {
+                const vrButton = VRButton.createButton(this.renderer);
+                vrButton.id = 'vr-session-button';
+                vrButton.style.display = 'none';
+                vrButton.style.visibility = 'hidden';
+                vrButton.style.position = 'absolute';
+                vrButton.style.left = '-9999px';
+                document.body.appendChild(vrButton);
+                
+                document.getElementById('vr-button').classList.remove('hidden');
+                document.getElementById('vr-button').addEventListener('click', () => {
+                    vrButton.click();
+                });
+            }
+        }).catch(() => {
+            // VR not supported, do nothing
+        });
         
         // VR Controllers
         const controllerModelFactory = new XRControllerModelFactory();
